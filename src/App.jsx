@@ -1,5 +1,5 @@
 import { useState } from "react";
-// See 137 in Personal Notes
+// See 242 in Personal Notes
 
 import Player from "./components/Player.jsx";
 import GameBoard from "./components/GameBoard.jsx";
@@ -21,6 +21,19 @@ function deriveActivePlayer(gameTurns) {
   }
 
   return currentPlayer;
+}
+
+function deriveGameBoard(gameTurns) {
+  let gameBoard = [...initialGameBoard.map(array => [...array])];
+
+  for (const turn of gameTurns) {
+    const { square, player } = turn;
+    const { row, col } = square;
+
+    gameBoard[row][col] = player;
+  }
+
+  return gameBoard;
 }
 
 function deriveWinner(gameBoard, players) {
@@ -48,16 +61,7 @@ function App() {
   // const [activePlayer, setActivePlayer] = useState("X");
 
   const activePlayer = deriveActivePlayer(gameTurns);
-
-  let gameBoard = [...initialGameBoard.map(array => [...array])];
-
-  for (const turn of gameTurns) {
-    const { square, player } = turn;
-    const { row, col } = square;
-
-    gameBoard[row][col] = player;
-  }
-
+  const gameBoard = deriveGameBoard(gameTurns);
   const winner = deriveWinner(gameBoard, players);
   const hasDraw = gameTurns.length === 9 && !winner;
 
